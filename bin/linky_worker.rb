@@ -27,7 +27,7 @@ class LinkyWorker
   
   def fetch_remote
     @remote = @uploader.download!(@remote_data_file) rescue nil
-    @local = YAML::load(@remote)
+    @local = YAML::load(@remote) if @remote
     @local
   end
   
@@ -48,7 +48,7 @@ class LinkyWorker
     description = STDIN.gets.strip
     puts 'comma separated fields (link, background_image and discovery_date are magic, you should use them)'
     fields = STDIN.gets.strip.split(',').collect { |f| f.strip }
-    @local = {"info" => {"title" => title, "description" => description, 'secret_key' => Digest::SHA1.hexdigest(TIme.now.to_f.to_s)}, "fields" => fields}
+    @local = {"info" => {"title" => title, "description" => description, 'secret_key' => Digest::SHA1.hexdigest(Time.now.to_f.to_s)}, "fields" => fields}
     send_local_data_to_remote
   end
   
@@ -79,6 +79,10 @@ class LinkyWorker
     end
   end
   
+  def prompt_for_entry(values = {})
+    add_entry(input_for_item(@local['fields'], values))
+  end
+
   def add_entry(entry)
     @local['items'] ||= {}
     @local['items']["item#{ Time.now.to_i.to_s }"] = entry
@@ -93,14 +97,23 @@ class LinkyWorker
   end
 
   private
-  def input_for_item(fields)
+  def input_for_item(fields, values = {})
     puts "adding a new item to your linky"
-    fields.inject({}) do |memo, item|
-      puts "enter a value for the #{ item } (#{ item == 'discovery_date' ? 'leave blank for today' : 'or enter to leave blank' })"
-      memo[item] = STDIN.gets.strip
-      if memo[item].empty? && item == 'discovery_date'
-        memo[item] = "#{ Time.now.year }, #{ Time.now.month }, #{ Time.now.day }"
+    fields.inject(values) do |memo, item|
+      message = "Enter a value for '#{ item }'\n"
+
+      if memo[item]
+        message += "(leave blank to keep value '#{memo[item]}')\n"
+      elsif item == 'discovery_date'
+        message += "(leave blank for today)\n"
       end
+
+      puts message
+      input = STDIN.gets.strip
+
+      memo[item] = "#{ Time.now.year }, #{ Time.now.month }, #{ Time.now.day }" if item == 'discovery_date' && input.length.zero?
+      memo[item] = input unless input.length.zero? && memo[item]
+
       memo
     end
   end

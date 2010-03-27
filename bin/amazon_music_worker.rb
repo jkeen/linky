@@ -24,7 +24,7 @@ class AmazonMusicWorker
     return unless info.processed
     linky_data = {'artist' => info.artist, 'album' => info.album, 'link' => info.referral_url}
     process_image(info.album_image, linky_data)
-    @linky.add_entry(linky_data)
+    @linky.prompt_for_entry(linky_data)
   end
   
   def process_image(image_url, data)
@@ -43,6 +43,13 @@ class AmazonMusicWorker
   def parameterize(string, sep = '-')
     # replace accented chars with ther ascii equivalents
     parameterized_string = transliterate(string)
+
+    suffix = "?"
+    parameterized_string.gsub!(/\.[a-zA-Z]{1,6}$/) do |match|
+      suffix = match #store suffix to append later
+      "" #replace with nothing
+    end
+
     # Turn unwanted chars into the seperator
     parameterized_string.gsub!(/[^a-z0-9\-_\+]+/i, sep)
     unless sep.empty? || sep.nil?
@@ -52,7 +59,7 @@ class AmazonMusicWorker
       # Remove leading/trailing separator.
       parameterized_string.gsub!(/^#{re_sep}|#{re_sep}$/i, '')
     end
-    parameterized_string.downcase
+    "#{parameterized_string.downcase}#{suffix}" #append suffix
   end
 
   def transliterate(string)

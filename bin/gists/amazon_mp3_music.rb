@@ -3,7 +3,7 @@ require 'open-uri'
 
 class AmazonMp3Music
   ASSOCIATE_ID = 'enjoybeing-20'
-  AMAZON_INJECTED_STRINGS = [' (Amazon Exclusive)', ' [Explicit]']
+  AMAZON_INJECTED_STRINGS = ['(Amazon Exclusive)', /\[.+\]$/]
 
   attr_accessor :asin, :artist, :album, :album_image, :referral_url, :processed
   def initialize(url)
@@ -31,6 +31,7 @@ class AmazonMp3Music
   
   def trim_the_bullshit(string)
     AMAZON_INJECTED_STRINGS.each { |s| string.gsub!(s, '') }
-    string
+    
+    string.strip
   end
 end
