@@ -2,7 +2,7 @@ require 'hpricot'
 require 'open-uri'
 
 class AmazonMp3Music
-  ASSOCIATE_ID = 'enjoybeing-20'
+  ASSOCIATE_ID = 'xl09-20'
   AMAZON_INJECTED_STRINGS = ['(Amazon Exclusive)', /\[.+\]$/]
 
   attr_accessor :asin, :artist, :album, :album_image, :referral_url, :processed

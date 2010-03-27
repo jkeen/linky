@@ -34,7 +34,7 @@ class AmazonMusicWorker
     File.open(local_file, 'w+') do |f|
       f.write(open(image_url).readlines)
     end
-    resize(local_file)
+    # resize(local_file)
     @linky.uploader.upload!(local_file, remote_file)
     data['background_image'] = "http://#{ File.join(@linky.config['website'], 'imagery', image_name) }"
   end

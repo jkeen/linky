@@ -18,6 +18,7 @@ class LinkyWorker
 
     @local_data_file = File.join(@config['local_base'], 'linky.yml')
     @remote_data_file = File.join(@config['remote_base'], 'linky.yml')
+    
     Net::SFTP.start(@config['host'], @config['user']) do |sftp|
       @uploader = sftp
       yield self
@@ -82,10 +83,10 @@ class LinkyWorker
   def prompt_for_entry(values = {})
     add_entry(input_for_item(@local['fields'], values))
   end
-
+  
   def add_entry(entry)
     @local['items'] ||= {}
-    @local['items']["item#{ Time.now.to_i.to_s }"] = entry
+    @local['items']["item#{ Time.now.to_i.to_s }"] = entry    
   end
   
   def send_local_data_to_remote(local = nil)
@@ -111,7 +112,7 @@ class LinkyWorker
       puts message
       input = STDIN.gets.strip
 
-      memo[item] = "#{ Time.now.year }, #{ Time.now.month }, #{ Time.now.day }" if item == 'discovery_date' && input.length.zero?
+      memo[item] = Time.now.strftime("%Y-%m-%d") if item == 'discovery_date' && input.length.zero?
       memo[item] = input unless input.length.zero? && memo[item]
 
       memo

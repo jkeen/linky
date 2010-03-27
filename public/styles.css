@@ -1,0 +1,76 @@
+*{ margin:0; padding:0; }
+body { 
+  font-family: Helvetica, Arial, sans-serif;
+  font-size:80%;
+}
+h1, h2{ display:none; }
+ul li.entry{
+  list-style:none;
+  float:left;
+  border: 1px solid #CCC;
+  width:15em;
+  height:15em;
+  overflow:hidden;
+  background:transparent none no-repeat top left;
+  position:relative;
+  margin:5px;
+  box-shadow: 5px 5px 5px #CCC;
+  -webkit-box-shadow: 5px 5px 5px #CCC;
+  -moz-box-shadow: 5px 5px 5px #CCC;
+}
+
+ul li.entry img {
+  position:absolute;
+  height:15em;  
+}
+
+ul li.no-link, ul li a{
+  color:#FFF;
+  display:block;
+  text-decoration:none;
+}
+
+ul li.entry ul{ 
+  list-style: none;
+  display:block;
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  top:0;
+  opacity: 0;
+  -moz-opacity: 0;
+  filter:alpha(opacity=0);
+  -webkit-transition:all linear 0.3s;
+  text-align:center;
+  background-color:#333;
+  z-index:1;
+  padding:5px;
+}
+
+ul li.entry:hover ul {
+  opacity: 0.8;
+  -moz-opacity: 0.8;
+ filter:alpha(opacity=80);
+}
+
+ul li.entry ul li {
+  text-decoration:none;
+  font-size:1em;
+  color:#FFF;
+}
+ul li.entry ul li.artist {
+  font-weight:bold;
+  font-size:1.1em;
+}
+ul li.entry ul li.album {
+  font-weight:normal;
+  font-size:1.0em;
+}
+ul li.entry ul li.comments {
+  border-top:1px dotted #EEE;
+  margin-top:10px;
+  padding-top:10px;
+  font-size:0.9em;
+  color:#DDD;
+}
