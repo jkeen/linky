@@ -16,9 +16,11 @@ $linky = new Linky('../linky.yml');
     <h1><?php echo $linky->title ?></h1>
     <h2><?php echo $linky->description ?></h2>
     <ul>      
-      <?php uksort($linky->items, 'cmp'); ?>
-      <?php foreach ($linky->items as $i => $entry) {?>
-        <li class="entry <?php if (!isset($entry['link'])) { echo 'no-link'; } ?>">
+      <?php global $array; ?>
+      <?php $array = $linky->items; ?>
+      <?php uksort($array, 'compare'); ?>    
+      <?php foreach ($array as $i => $entry) {?>
+        <li class="entry <?php if (!isset($entry['link'])) { echo 'no-link'; } ?>" data-date="<?php echo $entry['discovery_date']; ?>">
           <?php if (isset($entry['link'])) { echo '<a href="' . $entry['link'] . '">'; } ?>
           <ul>
             <li class="artist"><?php echo $entry['artist']; ?></li>

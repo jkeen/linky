@@ -3,9 +3,11 @@
 // http://code.google.com/p/spyc/
 include('./spyc/spyc.php');
 
-function cmp($a, $b) {
+function compare($a, $b) {
     global $array;
-    return strcmp($array['items'][$a]['discovery_date'], $array['items'][$b]['discovery_date']);
+    $a_date = strtotime($array[$a]['discovery_date']);
+    $b_date = strtotime($array[$b]['discovery_date']);
+    return strcmp($b_date, $a_date);
 }
 
 class Linky{
@@ -17,7 +19,6 @@ class Linky{
     $this->title = $this->info['title'];
     $this->description = $this->info['description'];
     $keys = array_keys($this->document); 
-    
     $this->items = $this->document['items'];
   }
 }
